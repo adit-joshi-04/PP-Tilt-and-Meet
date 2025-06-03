@@ -37,7 +37,7 @@ function preload() {
 }
 
 function setup() {
-  
+  createCanvas(windowWidth, windowHeight);
   ballX = width / 2;
   ballY = height / 2;
   targetX = ballX;
@@ -130,7 +130,6 @@ function handleOrientation(event) {
 }
 
 function draw() {
-  createCanvas(windowWidth, windowHeight);
   
   if (!started) {
     background('#FFD60D');
