@@ -334,8 +334,6 @@ function requestAccess() {
   }
 }
 
-
-
-
-
-
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
