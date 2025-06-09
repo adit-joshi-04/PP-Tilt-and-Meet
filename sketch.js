@@ -62,33 +62,60 @@ function setup() {
   
   
 
+  
   // Central play button
   // permissionButton = createButton('▶');
-  permissionButton = createDiv(`
-    <svg width="72" height="72" viewBox="0 0 100 100">
-      <polygon points="35,25 75,50 35,75" 
-        fill="none" stroke="black" stroke-width="2" />
-    </svg>
-  `);
-  permissionButton.size(100, 100); // set fixed width and height
-  permissionButton.position(width / 2 - 50, height / 2 - 50); // center it
+  // permissionButton = createDiv(`
+  //   <svg width="72" height="72" viewBox="0 0 100 100">
+  //     <polygon points="35,25 75,50 35,75" 
+  //       fill="none" stroke="black" stroke-width="2" />
+  //   </svg>
+  // `);
 
-  // Style the button
-  permissionButton.style('padding-left', '0px');
-  permissionButton.style('padding-top', '0px');
-  permissionButton.style('font-size', '48px');
-  permissionButton.style('background', 'transparent');
-  permissionButton.style('color', '#000');
-  permissionButton.style('border', '1px solid #000');
-  permissionButton.style('border-radius', '50%');
-  permissionButton.style('cursor', 'pointer');
-  permissionButton.style('display', 'flex');
-  permissionButton.style('align-items', 'center');
-  permissionButton.style('justify-content', 'center');
-  permissionButton.style('text-align', 'center');
-  permissionButton.style('line-height', '60px'); // matches height to vertically center text
+  permissionButton = document.querySelector('.permission-button');
+  startText = document.querySelector('.start-text');
+  // permissionButton.size(100, 100); // set fixed width and height
+  // permissionButton.position(width / 2 - 50, height / 1.2 - 50); // center it
 
-  permissionButton.mousePressed(startSketch);
+  // // Style the button
+  // permissionButton.style('padding-left', '0px');
+  // permissionButton.style('padding-top', '0px');
+  // permissionButton.style('font-size', '48px');
+  // permissionButton.style('background', 'transparent');
+  // permissionButton.style('color', '#000');
+  // //permissionButton.style('border', '1px solid #000');
+  // //permissionButton.style('border-radius', '50%');
+  // permissionButton.style('cursor', 'pointer');
+  // permissionButton.style('display', 'flex');
+  // permissionButton.style('align-items', 'center');
+  // permissionButton.style('justify-content', 'center');
+  // permissionButton.style('text-align', 'center');
+  // permissionButton.style('line-height', '60px'); // matches height to vertically center text
+
+  // permissionButton.mousePressed(startSketch);
+  document.querySelector('.permission-button').addEventListener('click', () => {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission()
+      .then(response => {
+        if (response === 'granted') {
+          started = true;
+          permissionButton.style.visibility = 'hidden';
+          startText.style.visibility = 'hidden';
+          window.addEventListener('deviceorientation', handleOrientation);
+        } else {
+          alert('Permission denied for motion input.');
+        }
+      })
+      .catch(console.error);
+  } else {
+    // No permission needed, just start
+    started = true;
+    permissionButton.style.visibility = 'hidden';
+    startText.style.visibility = 'hidden';
+    window.addEventListener('deviceorientation', handleOrientation);
+  }
+});
 }
 
 function startSketch() {
@@ -131,7 +158,13 @@ function handleOrientation(event) {
 
 function draw() {
   
+  if(started){
+    noCursor();
+    document.querySelector('.head-container').style.cursor = 'none';
+  }
+
   if (!started) {
+    document.querySelector('.head-container').style.cursor = 'default';
     background('#FFD60D');
     
     textSize(18);
@@ -207,7 +240,7 @@ function draw() {
     // text("PONG", width / 2, height / 2 + 14);
     let diceSize = ballRadius * 2;
     imageMode(CENTER);
-    image(pingpongPNG, ballX, ballY, diceSize, diceSize);
+    image(pingpongPNG, ballX, ballY, diceSize * 1.4, diceSize * 1.4);
     
 
     for (let word of floatTexts) {
@@ -336,4 +369,5 @@ function requestAccess() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  // permissionButton.position(width / 2 - 50, height / 2 - 50); // center it
 }
