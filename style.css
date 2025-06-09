@@ -19,8 +19,8 @@ canvas {
   display: flex;
   flex-direction: row;
   justify-content: space-between;  
-  align-items: end;
-  padding: 2%;
+  align-items: start;
+  padding: 2.4%;
   cursor: none;
 }
 
@@ -100,7 +100,7 @@ canvas {
   }
   
   .head-container {
-    padding: 4%;
+    padding: 3.8%;
   }
 
   
